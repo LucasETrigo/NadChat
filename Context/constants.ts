@@ -1,6 +1,6 @@
 // Contract address deployed to Monad Testnet using Remix
-// 0xdB7315B5c0A00cA03FE68ce91bed97eCF07032Db - NadChad Contract
-export const NadChatAddress = '0xdB7315B5c0A00cA03FE68ce91bed97eCF07032Db';
+// 0x797BD798E2C96EBd66DE171BBf452D7ed38e1158 - NadChad Contract
+export const NadChatAddress = '0x797BD798E2C96EBd66DE171BBf452D7ed38e1158';
 export const NadChatABI = [
     {
         inputs: [],
@@ -37,55 +37,6 @@ export const NadChatABI = [
         ],
         name: 'AccountCreated',
         type: 'event',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'friend_key',
-                type: 'address',
-            },
-        ],
-        name: 'addFriend',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'string',
-                name: 'name',
-                type: 'string',
-            },
-            {
-                internalType: 'string',
-                name: 'profileImage',
-                type: 'string',
-            },
-            {
-                internalType: 'bool',
-                name: 'isPublic',
-                type: 'bool',
-            },
-        ],
-        name: 'createAccount',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'friend_key',
-                type: 'address',
-            },
-        ],
-        name: 'deleteMessages',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
     },
     {
         anonymous: false,
@@ -176,13 +127,6 @@ export const NadChatABI = [
         type: 'event',
     },
     {
-        inputs: [],
-        name: 'pause',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
         anonymous: false,
         inputs: [
             {
@@ -215,55 +159,7 @@ export const NadChatABI = [
                 type: 'address',
             },
         ],
-        name: 'removeFriend',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'friend_key',
-                type: 'address',
-            },
-            {
-                internalType: 'string',
-                name: '_msg',
-                type: 'string',
-            },
-        ],
-        name: 'sendMessage',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
-        inputs: [],
-        name: 'unpause',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-    },
-    {
-        inputs: [
-            {
-                internalType: 'string',
-                name: 'newName',
-                type: 'string',
-            },
-            {
-                internalType: 'string',
-                name: 'newProfileImage',
-                type: 'string',
-            },
-            {
-                internalType: 'bool',
-                name: 'isPublic',
-                type: 'bool',
-            },
-        ],
-        name: 'updateProfile',
+        name: 'addFriend',
         outputs: [],
         stateMutability: 'nonpayable',
         type: 'function',
@@ -285,6 +181,42 @@ export const NadChatABI = [
             },
         ],
         stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'string',
+                name: 'name',
+                type: 'string',
+            },
+            {
+                internalType: 'string',
+                name: 'profileImage',
+                type: 'string',
+            },
+            {
+                internalType: 'bool',
+                name: 'isPublic',
+                type: 'bool',
+            },
+        ],
+        name: 'createAccount',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'friend_key',
+                type: 'address',
+            },
+        ],
+        name: 'deleteMessages',
+        outputs: [],
+        stateMutability: 'nonpayable',
         type: 'function',
     },
     {
@@ -407,6 +339,13 @@ export const NadChatABI = [
     },
     {
         inputs: [],
+        name: 'pause',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [],
         name: 'paused',
         outputs: [
             {
@@ -472,6 +411,67 @@ export const NadChatABI = [
             },
         ],
         stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'friend_key',
+                type: 'address',
+            },
+        ],
+        name: 'removeFriend',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'friend_key',
+                type: 'address',
+            },
+            {
+                internalType: 'string',
+                name: '_msg',
+                type: 'string',
+            },
+        ],
+        name: 'sendMessage',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'unpause',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'string',
+                name: 'newName',
+                type: 'string',
+            },
+            {
+                internalType: 'string',
+                name: 'newProfileImage',
+                type: 'string',
+            },
+            {
+                internalType: 'bool',
+                name: 'isPublic',
+                type: 'bool',
+            },
+        ],
+        name: 'updateProfile',
+        outputs: [],
+        stateMutability: 'nonpayable',
         type: 'function',
     },
 ];

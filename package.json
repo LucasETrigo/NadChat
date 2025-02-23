@@ -1,6 +1,7 @@
 {
     "name": "tapnad",
     "version": "0.1.0",
+    "author": "0xLukkz",
     "private": true,
     "scripts": {
         "dev": "next dev",

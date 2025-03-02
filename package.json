@@ -10,14 +10,15 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@metamask/eth-sig-util": "^8.2.0",
         "@pinata/sdk": "^2.1.0",
         "@privy-io/react-auth": "^2.4.5",
         "@radix-ui/react-slot": "^1.1.2",
-        "@react-spring/web": "^9.7.5",
         "@react-three/drei": "^10.0.0",
         "@react-three/fiber": "^9.0.0-alpha.8",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "crypto-js": "^4.2.0",
         "ethers": "^6.13.5",
         "lucide-react": "^0.475.0",
         "motion": "^12.4.7",

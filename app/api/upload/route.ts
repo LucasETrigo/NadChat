@@ -46,10 +46,14 @@ export async function POST(request: NextRequest) {
 
         const ipfsHash = `ipfs://${result.IpfsHash}`;
         return NextResponse.json({ ipfsHash }, { status: 200 });
-    } catch (error) {
+    } catch (error: unknown) {
+        // Explicitly type as unknown
         console.error('Error uploading to Pinata:', error);
+        // Safely extract error message
+        const errorMessage =
+            error instanceof Error ? error.message : 'Unknown error';
         return NextResponse.json(
-            { error: 'Upload failed: ' + (error.message || 'Unknown error') },
+            { error: 'Upload failed: ' + errorMessage },
             { status: 500 }
         );
     }

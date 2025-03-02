@@ -1,22 +1,26 @@
 // components/hero.tsx
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { ColourfulText } from './ui/colourful-text';
 import { GlobeDemo } from './GlobeDemo';
-import { getProviderAndSigner } from '@/lib/contract';
+
 export default function Hero() {
-    const testConnection = async () => {
-        try {
-            const { provider, signer } = await getProviderAndSigner();
-            console.log('Provider:', provider);
-            console.log('Signer address:', await signer.getAddress());
-        } catch (error) {
-            console.error(error);
-        }
+    const router = useRouter();
+
+    // Navigate to /chat
+    const handleStartChatting = () => {
+        router.push('/chat');
     };
+
+    // Navigate to /all-users
+    const handleFindUsers = () => {
+        router.push('/all-users');
+    };
+
     return (
         <section className='relative min-h-[80vh] flex items-center justify-center pt-40 md:pt-48 pb-12 md:pb-16 overflow-hidden'>
             {/* Background Globe */}
@@ -47,7 +51,7 @@ export default function Hero() {
                         whileTap={{ scale: 0.95 }}
                     >
                         <Button
-                            onClick={testConnection}
+                            onClick={handleStartChatting}
                             size='lg'
                             className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg px-8 py-3 rounded-full glow-effect'
                         >
@@ -60,11 +64,12 @@ export default function Hero() {
                         whileTap={{ scale: 0.95 }}
                     >
                         <Button
+                            onClick={handleFindUsers}
                             variant='outline'
                             size='lg'
                             className='border-blue-500/50 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300 px-8 py-3 rounded-full'
                         >
-                            Explore Features
+                            Find Users
                         </Button>
                     </motion.div>
                 </div>

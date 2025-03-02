@@ -222,6 +222,7 @@ contract NadChat {
         onlyRegistered 
         returns (Message[] memory) 
     {
+        require(isFriend[msg.sender][friend_key], "Not friends");
         bytes32 chatCode = _getChatCode(msg.sender, friend_key);
         uint256 totalMessages = messageCount[chatCode];
         require(start < totalMessages, "Start index out of bounds");

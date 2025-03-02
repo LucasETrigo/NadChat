@@ -8,6 +8,24 @@ import { Github } from 'lucide-react';
 import Auth from './Auth';
 
 export default function Navbar() {
+    // Animation variants for links
+    const linkVariants = {
+        initial: {
+            scale: 1,
+            color: '#D1D5DB', // gray-300
+            textShadow: 'none',
+        },
+        hover: {
+            scale: 1.05,
+            color: '#676FFF', // Your accent purple
+            textShadow: '0px 0px 8px rgba(103, 111, 255, 0.5)', // Subtle purple glow
+            transition: {
+                duration: 0.2,
+                ease: 'easeOut',
+            },
+        },
+    };
+
     return (
         <motion.header
             initial={{ y: -100 }}
@@ -32,17 +50,25 @@ export default function Navbar() {
                     {['All Users', 'Chat', 'FAQs', 'About Us'].map((item) => (
                         <motion.div
                             key={item}
-                            whileHover={{ y: -2, color: '#60a5fa' }}
-                            transition={{ duration: 0.2 }}
+                            variants={linkVariants}
+                            initial='initial'
+                            whileHover='hover'
+                            className='relative'
                         >
                             <Link
                                 href={`/${item
                                     .toLowerCase()
                                     .replace(' ', '-')}`}
-                                className='text-gray-300 hover:text-blue-400 transition-colors duration-200'
+                                className='text-gray-300 transition-colors duration-200'
                             >
                                 {item}
                             </Link>
+                            {/* Glowing underline effect */}
+                            <motion.div
+                                className='absolute -bottom-1 left-0 w-full h-[2px] bg-[#676FFF] opacity-0'
+                                whileHover={{ opacity: 1 }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                            />
                         </motion.div>
                     ))}
                 </nav>
@@ -54,7 +80,7 @@ export default function Navbar() {
                         transition={{ duration: 0.2 }}
                     >
                         <Link
-                            href='https://github.com/amanesoft'
+                            href='https://github.com/lucasetrigo'
                             target='_blank'
                             rel='noreferrer'
                         >

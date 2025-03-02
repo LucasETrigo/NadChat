@@ -14,7 +14,7 @@ interface Friend {
 }
 
 interface Message {
-    sender: string;
+    sender: string | undefined;
     timestamp: string;
     msg: string;
     deletedBySender: boolean;
@@ -23,13 +23,24 @@ interface Message {
 
 export default function Chat() {
     const { ready, authenticated, user } = usePrivy();
-    const { userProfile } = useUser();
+    const { userProfile, openCreateModal } = useUser();
     const [friends, setFriends] = useState<Friend[]>([]);
     const [selectedFriend, setSelectedFriend] = useState<string | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
+
+    // Reset state when user changes (logout/login)
+    useEffect(() => {
+        if (!authenticated || !user?.wallet?.address) {
+            setFriends([]);
+            setMessages([]);
+            setSelectedFriend(null);
+            setNewMessage('');
+            setLoading(false);
+        }
+    }, [authenticated, user]);
 
     const fetchFriends = async () => {
         if (!authenticated || !user?.wallet?.address) return;
@@ -41,7 +52,7 @@ export default function Chat() {
                 user.wallet.address
             );
             if (!userExists) {
-                toast.error('Please create an account first.');
+                openCreateModal();
                 setLoading(false);
                 return;
             }
@@ -86,7 +97,16 @@ export default function Chat() {
                 0,
                 50
             );
-            setMessages(messageList);
+            console.log('Raw messages from contract:', messageList);
+            const filteredMessages = messageList.filter(
+                (msg: Message) =>
+                    msg.sender &&
+                    (msg.sender.toLowerCase() ===
+                        user.wallet.address.toLowerCase() ||
+                        msg.sender.toLowerCase() ===
+                            friendAddress.toLowerCase())
+            );
+            setMessages(filteredMessages);
             scrollToBottom();
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -133,15 +153,8 @@ export default function Chat() {
             const contract = getContract(signer);
             const tx = await contract.deleteMessages(selectedFriend);
             await tx.wait();
-            setMessages((prevMessages) =>
-                prevMessages.filter(
-                    (msg) =>
-                        msg.sender.toLowerCase() !==
-                        user.wallet.address.toLowerCase()
-                )
-            );
-            toast.success('Your messages deleted successfully!');
-            scrollToBottom();
+            toast.success('Messages deleted successfully!');
+            await fetchMessages(selectedFriend);
         } catch (error) {
             console.error('Error deleting messages:', error);
             toast.error(
@@ -168,7 +181,8 @@ export default function Chat() {
         return username.length > 12 ? `${username.slice(0, 10)}…` : username;
     };
 
-    const getMessageSenderName = (senderAddress: string) => {
+    const getMessageSenderName = (senderAddress: string | undefined) => {
+        if (!senderAddress) return 'Unknown';
         if (
             senderAddress.toLowerCase() === user?.wallet?.address.toLowerCase()
         ) {
@@ -189,6 +203,8 @@ export default function Chat() {
     useEffect(() => {
         if (selectedFriend) {
             fetchMessages(selectedFriend);
+        } else {
+            setMessages([]); // Clear messages when no friend is selected
         }
     }, [selectedFriend]);
 
@@ -196,8 +212,30 @@ export default function Chat() {
 
     if (!authenticated) {
         return (
-            <div className='p-4 text-center text-gray-300'>
-                Please connect your wallet to use the chat.
+            <div className='min-h-screen bg-gradient-to-br from-gray-900 to-black text-white flex items-center justify-center'>
+                <div className='text-center p-6 bg-gray-800/50 rounded-xl border border-gray-700/30'>
+                    <h2 className='text-2xl font-bold text-gray-300 mb-4'>
+                        You have to Login first to view this page
+                    </h2>
+                    <p className='text-gray-400'>
+                        Please connect your wallet to access the Chat page.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!userProfile) {
+        return (
+            <div className='min-h-screen bg-gradient-to-br from-gray-900 to-black text-white flex items-center justify-center'>
+                <div className='text-center p-6 bg-gray-800/50 rounded-xl border border-gray-700/30'>
+                    <h2 className='text-2xl font-bold text-gray-300 mb-4'>
+                        Creating Your Account
+                    </h2>
+                    <p className='text-gray-400'>
+                        Please complete the account creation process.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -206,11 +244,8 @@ export default function Chat() {
         <div className='flex flex-col top-20 min-h-screen bg-gradient-to-br from-gray-900 to-black text-white'>
             <h1 className='text-3xl font-bold mb-6'></h1>
             <h1 className='text-3xl font-bold mb-6'></h1>
-            <div className='pt-32 px-6 pb-6 flex flex-col flex-1'>
-                {' '}
-                {/* Increased pt-20 to pt-24 */}
-                <div className='flex gap-6 h-full'>
-                    {/* Friends List */}
+            <div className='pt-20 px-6 pb-6 flex flex-col flex-1'>
+                <div className='flex flex-1 gap-6 h-full'>
                     <div className='w-1/4 bg-gray-800/50 rounded-xl p-4 border border-gray-700/30 flex flex-col max-h-[calc(100vh-16rem)]'>
                         <h2 className='text-xl font-semibold mb-4'>Friends</h2>
                         {loading && friends.length === 0 ? (
@@ -239,6 +274,14 @@ export default function Chat() {
                                                 src={friend.profileImage}
                                                 alt={`${friend.username}'s avatar`}
                                                 className='w-8 h-8 rounded-full object-cover'
+                                                onError={(e) => {
+                                                    console.log(
+                                                        'Image failed to load:',
+                                                        friend.profileImage
+                                                    );
+                                                    e.currentTarget.src =
+                                                        '/default-avatar.png';
+                                                }}
                                             />
                                         ) : (
                                             <User
@@ -252,8 +295,6 @@ export default function Chat() {
                             </ul>
                         )}
                     </div>
-
-                    {/* Chat Area */}
                     <div className='w-3/4 bg-gray-800/50 rounded-xl p-4 border border-gray-700/30 flex flex-col max-h-[calc(100vh-16rem)]'>
                         {selectedFriend ? (
                             <>
@@ -271,6 +312,15 @@ export default function Chat() {
                                                         .username
                                                 }'s avatar`}
                                                 className='w-8 h-8 rounded-full object-cover'
+                                                onError={(e) => {
+                                                    console.log(
+                                                        'Image failed to load:',
+                                                        getSelectedFriendDetails()
+                                                            .profileImage
+                                                    );
+                                                    e.currentTarget.src =
+                                                        '/default-avatar.png';
+                                                }}
                                             />
                                         ) : (
                                             <User
@@ -307,7 +357,7 @@ export default function Chat() {
                                             <div
                                                 key={index}
                                                 className={`mb-2 p-3 rounded-lg flex flex-col ${
-                                                    msg.sender.toLowerCase() ===
+                                                    msg.sender?.toLowerCase() ===
                                                     user?.wallet?.address.toLowerCase()
                                                         ? 'bg-purple-600/50 ml-auto'
                                                         : 'bg-gray-700/50'
@@ -320,10 +370,13 @@ export default function Chat() {
                                                 </p>
                                                 <p>{msg.msg}</p>
                                                 <p className='text-xs text-gray-400 mt-1'>
-                                                    {new Date(
-                                                        Number(msg.timestamp) *
-                                                            1000
-                                                    ).toLocaleTimeString()}
+                                                    {Number(msg.timestamp)
+                                                        ? new Date(
+                                                              Number(
+                                                                  msg.timestamp
+                                                              ) * 1000
+                                                          ).toLocaleTimeString()
+                                                        : 'Unknown Time'}
                                                 </p>
                                             </div>
                                         ))

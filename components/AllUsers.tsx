@@ -50,7 +50,7 @@ export default function AllUsers() {
                             u.accountAddress,
                             ':',
                             profileImage
-                        ); // Debug log
+                        );
                         return {
                             name: u.name,
                             accountAddress: u.accountAddress,
@@ -125,8 +125,15 @@ export default function AllUsers() {
 
     if (!authenticated) {
         return (
-            <div className='p-4 text-center text-gray-300'>
-                Please connect your wallet to view users.
+            <div className='min-h-screen bg-gradient-to-br from-gray-900 to-black text-white flex items-center justify-center'>
+                <div className='text-center p-6 bg-gray-800/50 rounded-xl border border-gray-700/30'>
+                    <h2 className='text-2xl font-bold text-gray-300 mb-4'>
+                        You have to Login first to view this page
+                    </h2>
+                    <p className='text-gray-400'>
+                        Please connect your wallet to access the All Users page.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -176,9 +183,9 @@ export default function AllUsers() {
                                                 console.log(
                                                     'Image failed to load:',
                                                     user.profileImage
-                                                ); // Debug log
+                                                );
                                                 e.currentTarget.src =
-                                                    '/default-avatar.png'; // Fallback
+                                                    '/default-avatar.png';
                                             }}
                                         />
                                     ) : (

@@ -2,7 +2,6 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useSpring, animated } from '@react-spring/web';
 import { cn } from '@/lib/utils';
 
 // Define features data
@@ -96,14 +95,6 @@ const glowVariants = {
 
 export default function Features() {
     const nadchatLines = ['NadChat', 'built on', 'Monad'];
-
-    // Spring animation for background glow
-    const springProps = useSpring({
-        from: { opacity: 0, scale: 0.8 },
-        to: { opacity: 1, scale: 1 },
-        config: { tension: 120, friction: 14 },
-        delay: 4000,
-    });
 
     return (
         <section className='container py-12 md:py-16'>
@@ -199,12 +190,6 @@ export default function Features() {
                     </motion.div>
                 ))}
             </div>
-
-            {/* Extra cinematic flair */}
-            <animated.div
-                style={springProps}
-                className='fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-purple-900/10 to-transparent z-[-1]'
-            />
         </section>
     );
 }

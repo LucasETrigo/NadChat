@@ -1,4 +1,3 @@
-// components/AllUsers.tsx
 'use client';
 import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
@@ -24,7 +23,7 @@ export default function AllUsers() {
     const [manualAddress, setManualAddress] = useState('');
 
     const fetchUsersAndFriends = async () => {
-        if (!authenticated || !user?.wallet?.address) return;
+        if (!authenticated || !user?.wallet?.address) return; // Guard clause
         setLoading(true);
         try {
             const { signer } = await getProviderAndSigner();

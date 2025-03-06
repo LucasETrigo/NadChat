@@ -100,7 +100,7 @@ NadChat is a full-stack decentralized application:
 
 - **Privy**: `@privy-io/react-auth` for wallet auth.
 - **ethers.js**: `ethers` for contract calls.
-- **Pinata**: `@pinata/sdk` (planned for IPFS image uploads, not yet active).
+- **Pinata**: `@pinata/sdk` (IPFS image uploads).
 - **UI Enhancements**: Tailwind CSS, Framer Motion, Lucide React.
 
 ---

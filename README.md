@@ -7,7 +7,6 @@
 <p align="center"><em>Fast, Private Messaging on Monad Testnet</em></p>
 
 <p align="center">
-  <a href="https://github.com/LucasETrigo/NadChat/"><img src="https://img.shields.io/github/workflow/status/LucasETrigo/NadChat/CI" alt="Build Status"></a>
   <a href="https://monad.xyz"><img src="https://img.shields.io/badge/Built%20on-Monad-purple" alt="Monad"></a>
   <a href="https://privy.io"><img src="https://img.shields.io/badge/Auth-Privy-blue" alt="Privy"></a>
 </p>
